@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require '../lib/qseq'
+require 'optparse'
+require 'ostruct'
+require 'pp'
+
+class Qseq2fastq
+
+  def initialize()
+    @ost = OpenStruct.new
+    @ost.file = ""
+    @ost.type = :single
+    @ost.adaptor = "GATCGGAAGAG"
+    @ost.qseq = ""
+  end
+  attr_accessor :ost, :qseq
+ 
+  def option_parse(args)
+    opt = OptionParser.new
+    opt.banner = "Usage: #{$0} "
+
+    opt.on('-t TYPE', '--type', [:single, :pair], "select ....") do |t|
+      @ost.type = t
+    end
+    opt.on('-a', '--adaptor=SEQ') do |v|
+      @ost.adaptor = v
+    end
+    opt.on("-f FILE", "specify a file") do |f|
+      @ost.file = f
+    end
+    opt.parse!(args)
+    @ost.qseq = Qseq.new(@ost.type, @ost.adaptor)
+  end
+
+end
+
+q2f = Qseq2fastq.new
+options = q2f.option_parse(ARGV)
+
+#p ARGV
+#p options
+
+q2f.qseq.fp = File.open(qsf.ost.file, "r")
+p q2f.ost.type
+p q2f.ost.adaptor
+p q2f.ost.file
+
+#pp "Dumper #{options}"
+#puts "name: #{$0}"
+
+
